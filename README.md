@@ -28,6 +28,7 @@ FROM superstore
 GROUP BY category
 ORDER BY total_profit DESC;
 ```
+<img width="1920" height="1080" alt="Screenshot 2026-09-09 103901" src="https://github.com/user-attachments/assets/1fb97631-85dd-475a-b7a4-551e311aff2f" />
 
 ### 🌎 Region-wise Profit
 
@@ -38,6 +39,7 @@ FROM superstore
 GROUP BY region
 ORDER BY total_profit DESC;
 ```
+<img width="1920" height="1080" alt="Screenshot 2026-09-09 103849" src="https://github.com/user-attachments/assets/7195c031-d587-4d61-ba69-f22cc9ea650b" />
 
 ### 📉 Furniture — Sub-Category Profitability
 
@@ -173,3 +175,5 @@ A more controlled discount policy could help improve overall profitability.
 The goal of this project was to use SQL not just to retrieve data, but to **turn sales data into actionable business insights**.
 
 **Raw Data → SQL Analysis → Business Findings → Recommendations**
+
+
