@@ -1,59 +1,175 @@
-# Superstore-sales-analysis
-Analyzed Superstore sales data using SQL to find profit drivers
+# 📊 Superstore Sales Analysis
 
--- Kaunsi Category sabse zyada profit deti hai?
-select category, round(sum(profit),2) as total_profit
-from superstore
-group by category
-order by total_profit desc;
+> Analyzed Superstore sales data using SQL to identify **profit drivers, loss-making areas, and the impact of discounts on profitability.**
 
--- Region-wise profit
-select region, round(sum(profit), 2) as total_profit
-from superstore
-group by region
-order by total_profit desc;
+---
 
--- Furniture ke andar loss kahan se aa raha hai (Sub-Category level):
-select subcategory , round(sum(profit),2) as total_profit, round(avg(discount), 2) as discount
-from superstore
-where category = 'Furniture'
-group by 1
-order by total_profit asc;
+## 🔎 Analysis Questions
 
+This project answers the following business questions:
 
--- Discount aur Profit ka overall relationship
-select 
-	case
-		when discount = 0 then 'No '
-        when discount <=0.2 then 'Low 0-20%'
-        when discount <= 0.4 then 'Medium 20-40%'
-        else 'High 40-100%' end as discount_range,
-	round(sum(profit), 2) as total_profit,
-    count(*) as Num_Orders
-from superstore
-group by discount_range
-order by total_profit desc;
+* 🏆 Which **Category** generates the highest profit?
+* 🌎 Which **Region** performs best?
+* 📉 Where are losses coming from within **Furniture**?
+* 💸 What is the relationship between **Discount and Profit**?
+* ⭐ Which products generate the most profit?
+* ⚠️ Which products generate the lowest profit?
 
--- Top 5 Products (by Profit)
-select subcategory, round(sum(profit), 2) as total_profit
-from superstore
-group by 1
-order by 2 desc
-limit 5;
+---
 
--- Bottom 5 Products 
-select subcategory, round(sum(profit), 2) as Low_Profit
-from superstore
-group by 1
-order by 2 asc
-limit 5;
+## 💻 SQL Analysis
 
-Superstore Sales Analysis — Key Findings
+### 🏆 Most Profitable Categories
 
-Category Performance: Technology sabse profitable category hai ($145K), phir Office Supplies ($122K). Furniture sabse kam profitable hai (~$18K) discount-heavy sub-categories ki wajah se.
-Regional Performance: West aur East regions sabse zyada profit dete hain. Central region sabse kam profitable hai — potential improvement area.
-Discount-Profit Relationship: Ye sabse important finding hai — 20% se zyada discount dene par company loss mein chali jati hai. No-discount orders ne $320K profit diya, jabke 40%+ discount wale orders ne $99K ka loss diya.
-Problem Products: Tables aur Bookcases sabse zyada loss de rahe hain, jo unke high average discount (26% aur 21%) se directly linked hai.
-Star Products: Copiers, Phones, aur Accessories sabse zyada profit generate karte hain aur discount strategy ko replicate/study karne layak hain.
+```sql
+SELECT category,
+       ROUND(SUM(profit), 2) AS total_profit
+FROM superstore
+GROUP BY category
+ORDER BY total_profit DESC;
+```
 
-Recommendation: Discount policy ko revisit karna chahiye, khaas kar Tables aur Bookcases par — 20% se zyada discount avoid karna profit barha sakta hai.
+### 🌎 Region-wise Profit
+
+```sql
+SELECT region,
+       ROUND(SUM(profit), 2) AS total_profit
+FROM superstore
+GROUP BY region
+ORDER BY total_profit DESC;
+```
+
+### 📉 Furniture — Sub-Category Profitability
+
+```sql
+SELECT subcategory,
+       ROUND(SUM(profit), 2) AS total_profit,
+       ROUND(AVG(discount), 2) AS discount
+FROM superstore
+WHERE category = 'Furniture'
+GROUP BY 1
+ORDER BY total_profit ASC;
+```
+
+### 💸 Discount & Profit Relationship
+
+```sql
+SELECT 
+    CASE
+        WHEN discount = 0 THEN 'No Discount'
+        WHEN discount <= 0.2 THEN 'Low 0-20%'
+        WHEN discount <= 0.4 THEN 'Medium 20-40%'
+        ELSE 'High 40-100%'
+    END AS discount_range,
+    ROUND(SUM(profit), 2) AS total_profit,
+    COUNT(*) AS Num_Orders
+FROM superstore
+GROUP BY discount_range
+ORDER BY total_profit DESC;
+```
+
+### ⭐ Top 5 Products by Profit
+
+```sql
+SELECT subcategory,
+       ROUND(SUM(profit), 2) AS total_profit
+FROM superstore
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 5;
+```
+
+### ⚠️ Bottom 5 Products by Profit
+
+```sql
+SELECT subcategory,
+       ROUND(SUM(profit), 2) AS Low_Profit
+FROM superstore
+GROUP BY 1
+ORDER BY 2 ASC
+LIMIT 5;
+```
+
+---
+
+# 📈 Key Findings
+
+### 🥇 Category Performance
+
+**Technology** is the most profitable category with approximately **$145K** in profit, followed by **Office Supplies** with **$122K**.
+
+**Furniture** is the least profitable category at approximately **$18K**, mainly due to discount-heavy sub-categories.
+
+---
+
+### 🌎 Regional Performance
+
+**West** and **East** are the strongest-performing regions in terms of profit.
+
+**Central** is the least profitable region, making it a potential area for improvement.
+
+---
+
+### 💸 Discount & Profit Relationship
+
+The most important finding is the relationship between **discounting and profitability**.
+
+| Discount Range |     Profit |
+| -------------- | ---------: |
+| No Discount    | **+$320K** |
+| 40%+ Discount  |  **-$99K** |
+
+This suggests that aggressive discounting can significantly reduce profitability.
+
+---
+
+### ⚠️ Problem Products
+
+**Tables** and **Bookcases** are the biggest loss-making sub-categories.
+
+Their relatively high average discounts:
+
+* **Tables:** ~26%
+* **Bookcases:** ~21%
+
+appear to be contributing to their poor profitability.
+
+---
+
+### ⭐ Star Products
+
+**Copiers, Phones, and Accessories** are among the strongest profit-generating sub-categories.
+
+These products could be studied further to understand which pricing and discount strategies are driving their performance.
+
+---
+
+# 💡 Business Recommendation
+
+> **Revisit the discount strategy, especially for Tables and Bookcases.**
+
+Discounts above **20%** should be carefully evaluated because they can significantly reduce or even eliminate profit.
+
+A more controlled discount policy could help improve overall profitability.
+
+---
+
+## 🛠️ Skills Demonstrated
+
+* SQL
+* Data Aggregation
+* `GROUP BY`
+* `ORDER BY`
+* `CASE` Statements
+* Profitability Analysis
+* Discount Analysis
+* Business Insights
+* Data-Driven Recommendations
+
+---
+
+## 🎯 Project Goal
+
+The goal of this project was to use SQL not just to retrieve data, but to **turn sales data into actionable business insights**.
+
+**Raw Data → SQL Analysis → Business Findings → Recommendations**
